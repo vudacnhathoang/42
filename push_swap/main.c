@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 
+#define INT_MIN -2147483648
+#define INT_MAX 2147483647
 
 #include <stdlib.h>
 #include "ft_printf/ft_printf.h"
@@ -45,6 +47,19 @@ t_stack	*find_biggest(t_stack * stack)
 	return max;			
 }
 
+t_stack	*find_smallest(t_stack * stack)
+{
+	t_stack *min;
+
+	min = stack;
+	while  (stack->next!= NULL)
+	{
+		if (min->value > stack->next->value)
+			min= stack->next;
+		stack = stack->next;
+	} 
+	return min;			
+}
 
 void swap_stack(t_stack ** stack, char c)
 {
@@ -61,9 +76,9 @@ void swap_stack(t_stack ** stack, char c)
 	b->prev = NULL;
 	a->prev = b;
 	*stack = b;
-	if (c =='f')
+	if (c =='r')
 		return;
-	//ft_printf("s%c\n", c);
+	ft_printf("s%c\n", c);
 }
 
  void push_stack(t_stack **src,t_stack **dest,char c)
@@ -82,7 +97,7 @@ void swap_stack(t_stack ** stack, char c)
 	*dest = top;
 	if (c == 's')
 		return;
-//	ft_printf("p%c\n", c);
+	ft_printf("p%c\n", c);
  }
 void rotate_stack(t_stack **stack, char c)
 {
@@ -102,7 +117,7 @@ void rotate_stack(t_stack **stack, char c)
 	first->next = NULL;
 	if (c == 'r')
 		return;
-	//ft_printf("r%c\n", c);
+	ft_printf("r%c\n", c);
 }
 
  void reverser_stack(t_stack **stack, char c)
@@ -220,7 +235,7 @@ void print_stack(t_stack *p, t_stack *g)
 		}
 		ft_printf("\n");
 	}
-
+		ft_printf("         \n");
 }
 
 
@@ -248,23 +263,259 @@ int	stack_sorted(t_stack *a)
 	return (1);
 } 
 
+void indexing(t_stack *a)
+{
+	int i;
+	int med;
+
+	i = 0;
+	if(!a)
+		return;
+	med = stack_len(a) / 2;
+	while(a)
+	{
+		a->id =i;
+		if(i <= med)
+			a->a_median = 1;
+		else
+			a->a_median = 0;
+		a= a->next;
+		i++;
+	}
+}
+
+void target_for_a(t_stack *a, t_stack *b)
+{
+	t_stack *curr_b;
+	t_stack *n_target;
+	int		matching;
+
+	while(a)
+	{
+		matching = INT_MIN;
+		curr_b = b;
+		while(curr_b)
+		{
+			if (curr_b->value < a->value && curr_b->value > matching)
+			{
+				matching = curr_b->value;
+				n_target = curr_b;
+			}
+			curr_b = curr_b->next;
+		}
+		if(matching == INT_MIN)
+			a->target = find_biggest(b);
+		else
+			a->target = n_target;
+		a = a->next;
+	}
+}
+
+
+void cost_calculate(t_stack *a, t_stack *b)
+{
+	t_stack *curr_a;
+	int len_a;
+	int len_b;
+
+	len_a = stack_len(a);
+	len_b = stack_len(b);
+	curr_a = a;
+	while (curr_a)
+	{
+		curr_a->cost = 0;
+		if (curr_a->a_median == 1 )
+			curr_a->cost = curr_a->id;
+		else
+			curr_a->cost = len_a - curr_a->id;
+		if (curr_a->target->a_median == 1)
+			curr_a->cost += curr_a->target->id;
+		else
+			curr_a->cost += len_b - curr_a->target->id;
+		curr_a = curr_a->next;
+	}
+}
+void updating_a(t_stack *a, t_stack *b)
+{
+	indexing(a);
+	indexing(b);
+	target_for_a(a,b);
+	cost_calculate(a,b);
+}
+
+t_stack	*find_cheapest(t_stack *a)
+{
+	t_stack *curr_a;
+	t_stack *cheapest;
+
+	curr_a = a;
+	cheapest = a;
+	while(curr_a)
+	{
+		if (curr_a->cost < cheapest->cost)
+			cheapest = curr_a;
+		curr_a = curr_a->next;
+	}
+	return cheapest;
+}
+
+void rr (t_stack **a, t_stack **b,t_stack *cheapest)
+{
+	while (*a != cheapest && *b != cheapest->target)
+	{
+		rotate_stack(a, 'r');
+		rotate_stack(b, 'r');
+		ft_printf("rr\n");
+	}
+	while (*a != cheapest)
+		rotate_stack(a, 'a');
+	while (*b != cheapest->target)
+		rotate_stack(b, 'b');
+}
+void rrr(t_stack **a, t_stack **b, t_stack *cheapest)
+{
+	while (*a != cheapest && *b != cheapest->target)
+	{
+		reverser_stack(a, 'r');
+		reverser_stack(b, 'r');
+		ft_printf("rrr\n");
+	}
+	while (*a != cheapest)
+		reverser_stack(a, 'a');
+	while (*b != cheapest->target)
+		reverser_stack(b, 'b');
+	
+}
+
+void rotate_sep(t_stack **a, t_stack **b, t_stack *cheapest)
+{
+	if (cheapest->a_median)
+		while (*a != cheapest)
+			rotate_stack(a, 'h');
+	else
+		while (*a != cheapest)
+			reverser_stack(a, 'h');
+	if (cheapest->target->a_median)
+		while (*b != cheapest->target)
+			rotate_stack(b, 'h');
+	else
+		while (*b != cheapest->target)
+			reverser_stack(b, 'h');
+}
+
+void push_cheapest(t_stack **a, t_stack **b)
+{
+	t_stack *cheapest;
+
+	cheapest = find_cheapest(*a);
+	if (cheapest->a_median && cheapest->target->a_median)
+		rr(a,b, cheapest);
+	if(!cheapest->a_median && !cheapest->target->a_median)
+		rrr(a,b, cheapest);
+	else 
+		rotate_sep(a,b, cheapest);
+	push_stack(a,b  ,'b');
+}
+
+void target_for_b(t_stack *a, t_stack *b)
+{
+	t_stack *curr_a;
+	t_stack *n_target;
+	int		matching;
+
+	while(b)
+	{
+		matching = INT_MAX;
+		curr_a = a;
+		while(curr_a)
+		{
+			if (curr_a->value > b->value && curr_a->value < matching)
+			{
+				matching = curr_a->value;
+				n_target = curr_a;
+			}
+			curr_a = curr_a->next;
+		}
+		if(matching == INT_MAX)
+			b->target = find_smallest(a);
+		else
+			b->target = n_target;
+		b = b->next;
+		
+	}
+}
+
+void updating_b(t_stack *a, t_stack *b)
+{
+	indexing(a);
+	indexing(b);
+	target_for_b(a,b);
+}
+
+
+void push_cheapest_b(t_stack **a, t_stack **b)
+{
+	if ((*b)->target->a_median)
+		while (*a != (*b)->target)
+			rotate_stack(a, 'a');
+	else
+		while (*a != (*b)->target)
+			reverser_stack(a, 'a');
+	push_stack(b,a, 'a');
+
+}
+
+void	finish_sort(t_stack **a)
+{
+	t_stack *smallest;
+	smallest = find_smallest(*a);
+	if (smallest->a_median)
+		while (*a != smallest)
+			rotate_stack(a, 'a');
+	else
+		while (*a != smallest)
+			reverser_stack(a, 'a');
+}
+
 void push_swap(t_stack **a, t_stack **b)
  {
 	int	size_a;
 
 	size_a = stack_len(*a);
-	if (size_a-- > 3 && !stack_sorted(*a))
+	if (size_a-- > 3)
 		push_stack(a, b, 'b');
-	if (size_a-- > 3 && !stack_sorted(*a))
+	//print_stack(*a, *b);
+	if (size_a-- > 3 )
 		push_stack(a, b, 'b');
-	while (size_a-- > 3 && !stack_sorted(*a))
+	//print_stack(*a, *b);
+	while (size_a-- > 3)
 	{
-		
-
+		updating_a(*a, *b);
+		push_cheapest(a, b);
+		//print_stack(*a, *b);
 	}	
-
-	
+	sort_three(a);
+	while (*b != NULL)
+	{
+		updating_b(*a, *b);
+		push_cheapest_b(a, b);
+		//print_stack(*a, *b);
+	}
+	finish_sort(a);
+	//print_stack(*a, *b);
  }
+
+void free_stack(t_stack *a)
+{
+	t_stack *tmp;
+
+	while(a)
+	{
+		tmp = a;
+		a = a->next;
+		free(tmp);
+	}
+}
 
 int main(int ac, char **ag)
 {
@@ -293,6 +544,8 @@ if (ac == 2)
 		return (1);
 	a = innit_stack(ag);
 	}
-	print_stack(a,b);
+	//print_stack(a,b);
+	push_swap(&a,&b);
+	free_stack(a);
+	free(a);
 }
-
