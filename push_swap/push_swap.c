@@ -36,6 +36,7 @@ int	main(int ac, char *ag[])
 			handle_error("Not valid input");
 		a = innit_stack(array);
 	}
+	check_duplicate(a, array);
 	push_swap(&a, &b);
 	free_stack(a, array);
 }

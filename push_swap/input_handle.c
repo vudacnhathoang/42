@@ -54,7 +54,7 @@ int ft_isnumber(char *s)
 	return (1);
 }
 
-void check_duplicate(t_stack *a)
+void check_duplicate(t_stack *a, char **array)
 {
 	t_stack *p;
 	t_stack *q;
@@ -67,15 +67,15 @@ void check_duplicate(t_stack *a)
 		{
 			if (p->value == q->value)
 			{
+				free_stack(a, array);
 				handle_error("Duplicate input");
-				free_stack(a, NULL);
 			}
 			q = q->next;
 		}
 		p = p->next;
 	}
-
 }
+
 t_stack*	innit_stack(char **nums)
 {
 	int		num;
@@ -99,6 +99,5 @@ t_stack*	innit_stack(char **nums)
 		current = new;
 		nums++;
 	}
-	check_duplicate(current);
 	return current;
 }

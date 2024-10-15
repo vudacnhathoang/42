@@ -63,5 +63,5 @@ void	finish_sort(t_stack **a);
 void	push_swap(t_stack **a, t_stack **b);
 void	free_stack(t_stack *a, char **array);
 void	handle_error(char *msg);
-void	check_duplicate(t_stack *a);
+void	check_duplicate(t_stack *a, char **array);
 #endif
