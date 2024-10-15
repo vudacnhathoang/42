@@ -1,7 +1,7 @@
 NAME := push_swap
 LIBFT := ./Libft
 PRINTF := ./ft_printf
-SRCS := main.c 
+SRCS := push_swap.c input_handle.c algos.c algos_utils.c utils.c ops.c ops2.c
 FLAGS := -Wall -Wextra -Werror
 LIBS := $(LIBFT)/libft.a $(PRINTF)/libftprintf.a
 CC := cc
