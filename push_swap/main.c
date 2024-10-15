@@ -61,7 +61,7 @@ t_stack	*find_smallest(t_stack * stack)
 	return min;			
 }
 
-void swap_stack(t_stack ** stack, char c)
+void swap_stack(t_stack **stack, char c)
 {
 	t_stack *a;
 	t_stack *b;
@@ -72,13 +72,14 @@ void swap_stack(t_stack ** stack, char c)
 	a = *stack;
 	b = (*stack)->next;
 	a->next = b->next;
+	if (b->next)
+		b->next->prev = a;
 	b->next = a;
 	b->prev = NULL;
 	a->prev = b;
 	*stack = b;
-	if (c =='r')
-		return;
-	ft_printf("s%c\n", c);
+	if (c != 'r')
+		ft_printf("s%c\n", c);
 }
 
  void push_stack(t_stack **src,t_stack **dest,char c)
@@ -135,7 +136,7 @@ void rotate_stack(t_stack **stack, char c)
 	*stack = bottom;
 	if (c == 'r')
 		return;
-	//ft_printf("rr%c", c);	
+	ft_printf("rr%c\n", c);	
  }
 
 void sort_three(t_stack **stack)
@@ -146,7 +147,9 @@ void sort_three(t_stack **stack)
 	if (*stack == biggest)
 		rotate_stack(stack, 'a');
 	else if ((*stack)->next == biggest)
+	{
 		reverser_stack(stack, 'a');
+	}
 	if ((*stack)->value > (*stack)->next->value)
 		swap_stack(stack, 'a');
 }
@@ -502,7 +505,7 @@ void push_swap(t_stack **a, t_stack **b)
 		//print_stack(*a, *b);
 	}
 	finish_sort(a);
-	//print_stack(*a, *b);
+	print_stack(*a, *b);
  }
 
 void free_stack(t_stack *a)
@@ -544,8 +547,7 @@ if (ac == 2)
 		return (1);
 	a = innit_stack(ag);
 	}
-	//print_stack(a,b);
+	print_stack(a,b);
 	push_swap(&a,&b);
 	free_stack(a);
-	free(a);
 }
