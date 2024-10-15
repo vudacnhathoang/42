@@ -12,40 +12,6 @@
 
 #include "push_swap.h"
 
-void handle_error(char *msg)
-{
-	ft_printf("%s\n", msg);
-	exit(1);
-	
-}
-
-t_stack*	innit_stack(char **nums)
-{
-	int		num;
-	t_stack	*head;
-	t_stack	*current;
-	t_stack  *new;
-	
-	head = NULL;
-	current = NULL;
-	while (*nums)
-	{
-		num = ft_atoi(*nums);
-		new = (t_stack*)malloc(sizeof(t_stack));
-		new->value = num;
-		new->prev = NULL;
-		new->next = current;
-		if (head == NULL)
-			head = new;
-		else
-			current->prev = new;
-		current = new;
-		nums++;
-	}
-	return current;
-}
-
-
 int	main(int ac, char *ag[])
 {
 	t_stack	*a;

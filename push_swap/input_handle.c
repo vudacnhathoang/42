@@ -12,6 +12,12 @@
 
 #include "push_swap.h"
 
+void handle_error(char *msg)
+{
+	ft_printf("%s\n", msg);
+	exit(1);	
+}
+
 int check_input(char **nums, int x)
 {
 	while (nums[x] != NULL)
@@ -46,4 +52,53 @@ int ft_isnumber(char *s)
 		}
 	}
 	return (1);
+}
+
+void check_duplicate(t_stack *a)
+{
+	t_stack *p;
+	t_stack *q;
+
+	p = a;
+	while (p != NULL)
+	{
+		q = p->next;
+		while (q != NULL)
+		{
+			if (p->value == q->value)
+			{
+				handle_error("Duplicate input");
+				free_stack(a, NULL);
+			}
+			q = q->next;
+		}
+		p = p->next;
+	}
+
+}
+t_stack*	innit_stack(char **nums)
+{
+	int		num;
+	t_stack	*head;
+	t_stack	*current;
+	t_stack  *new;
+	
+	head = NULL;
+	current = NULL;
+	while (*nums)
+	{
+		num = ft_atoi(*nums);
+		new = (t_stack*)malloc(sizeof(t_stack));
+		new->value = num;
+		new->prev = NULL;
+		new->next = current;
+		if (head == NULL)
+			head = new;
+		else
+			current->prev = new;
+		current = new;
+		nums++;
+	}
+	check_duplicate(current);
+	return current;
 }
