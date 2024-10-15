@@ -12,14 +12,13 @@
 
 #include "push_swap.h"
 
-void swap_stack(t_stack **stack, char c)
+void	swap_stack(t_stack **stack, char c)
 {
-	t_stack *a;
-	t_stack *b;
-	
-	if(!(*stack) || !stack || !(*stack)->next)
-		return;
+	t_stack	*a;
+	t_stack	*b;
 
+	if (!(*stack) || !stack || !(*stack)->next)
+		return ;
 	a = *stack;
 	b = (*stack)->next;
 	a->next = b->next;
@@ -33,32 +32,32 @@ void swap_stack(t_stack **stack, char c)
 		ft_printf("s%c\n", c);
 }
 
-void push_stack(t_stack **src,t_stack **dest,char c)
+void	push_stack(t_stack **src, t_stack **dest, char c)
 {
 	t_stack	*top;
-	 
- 	if(!src|| !(*src))
-		return;
+
+	if (!src || !(*src))
+		return ;
 	top = *src;
 	*src = top->next;
-	if(*src)
+	if (*src)
 		(*src)->prev = NULL;
 	top->next = *dest;
-	if(*dest)
+	if (*dest)
 		(*dest)->prev = top;
 	*dest = top;
 	if (c == 's')
-		return;
+		return ;
 	ft_printf("p%c\n", c);
 }
 
-void rotate_stack(t_stack **stack, char c)
+void	rotate_stack(t_stack **stack, char c)
 {
 	t_stack	*first;
 	t_stack	*last;
-	
-	if(!stack|| !(*stack)|| (*stack)->next == NULL)
-		return;
+
+	if (!stack || !(*stack) || (*stack)->next == NULL)
+		return ;
 	last = *stack;
 	while (last->next != NULL)
 		last = last->next;
@@ -69,30 +68,31 @@ void rotate_stack(t_stack **stack, char c)
 	first->prev = last;
 	first->next = NULL;
 	if (c == 'r')
-		return;
+		return ;
 	ft_printf("r%c\n", c);
 }
-void reverser_stack(t_stack **stack, char c)
+
+void	reverser_stack(t_stack **stack, char c)
 {
 	t_stack	*bottom;
-	
-	if(!stack|| !(*stack)|| (*stack)->next == NULL)
-		return;
+
+	if (!stack || !(*stack) || (*stack)->next == NULL)
+		return ;
 	bottom = *stack;
-	while(bottom->next != NULL)
+	while (bottom->next != NULL)
 		bottom = bottom->next;
 	(*stack)->prev = bottom;
 	bottom->prev->next = NULL;
-	bottom->next =*stack;
+	bottom->next = *stack;
 	*stack = bottom;
 	if (c == 'r')
-		return;
-	ft_printf("rr%c\n", c);	
+		return ;
+	ft_printf("rr%c\n", c);
 }
 
-void sort_three(t_stack **stack)
+void	sort_three(t_stack **stack)
 {
-	t_stack *biggest;
+	t_stack	*biggest;
 
 	biggest = find_biggest(*stack);
 	if (*stack == biggest)

@@ -12,7 +12,7 @@
 
 #include "push_swap.h"
 
-void rr (t_stack **a, t_stack **b,t_stack *cheapest)
+void	rr(t_stack **a, t_stack **b, t_stack *cheapest)
 {
 	while (*a != cheapest && *b != cheapest->target)
 	{
@@ -26,7 +26,7 @@ void rr (t_stack **a, t_stack **b,t_stack *cheapest)
 		rotate_stack(b, 'b');
 }
 
-void rrr(t_stack **a, t_stack **b, t_stack *cheapest)
+void	rrr(t_stack **a, t_stack **b, t_stack *cheapest)
 {
 	while (*a != cheapest && *b != cheapest->target)
 	{
@@ -38,10 +38,9 @@ void rrr(t_stack **a, t_stack **b, t_stack *cheapest)
 		reverser_stack(a, 'a');
 	while (*b != cheapest->target)
 		reverser_stack(b, 'b');
-	
 }
 
-void rotate_sep(t_stack **a, t_stack **b, t_stack *cheapest)
+void	rotate_sep(t_stack **a, t_stack **b, t_stack *cheapest)
 {
 	if (cheapest->a_median)
 		while (*a != cheapest)
@@ -59,10 +58,11 @@ void rotate_sep(t_stack **a, t_stack **b, t_stack *cheapest)
 
 void	finish_sort(t_stack **a)
 {
-	t_stack *smallest;
+	t_stack	*smallest;
+
 	smallest = find_smallest(*a);
 	if (*a != smallest)
-	{ 
+	{
 		if (smallest->a_median)
 			while (*a != smallest)
 				rotate_stack(a, 'a');
@@ -74,16 +74,16 @@ void	finish_sort(t_stack **a)
 
 t_stack	*find_cheapest(t_stack *a)
 {
-	t_stack *curr_a;
-	t_stack *cheapest;
+	t_stack	*curr_a;
+	t_stack	*cheapest;
 
 	curr_a = a;
 	cheapest = a;
-	while(curr_a)
+	while (curr_a)
 	{
 		if (curr_a->cost < cheapest->cost)
 			cheapest = curr_a;
 		curr_a = curr_a->next;
 	}
-	return cheapest;
+	return (cheapest);
 }

@@ -12,73 +12,73 @@
 
 #include "push_swap.h"
 
-t_stack	*find_biggest(t_stack * stack)
+t_stack	*find_biggest(t_stack *stack)
 {
-	t_stack *max;
+	t_stack	*max;
 
 	max = stack;
-	while  (stack->next!= NULL)
+	while (stack->next != NULL)
 	{
 		if (max->value < stack->next->value)
 			max = stack->next;
 		stack = stack->next;
-	} 
-	return max;			
+	}
+	return (max);
 }
 
-t_stack	*find_smallest(t_stack * stack)
+t_stack	*find_smallest(t_stack *stack)
 {
-	t_stack *min;
+	t_stack	*min;
 
 	min = stack;
-	while  (stack->next!= NULL)
+	while (stack->next != NULL)
 	{
 		if (min->value > stack->next->value)
-			min= stack->next;
+			min = stack->next;
 		stack = stack->next;
-	} 
-	return min;			
+	}
+	return (min);
 }
 
-int		stack_len(t_stack *a)
+int	stack_len(t_stack *a)
 {
-	int len;
+	int	len;
 
 	len = 0;
-	while(a != NULL)
+	while (a != NULL)
 	{
 		len++;
 		a = a->next;
 	}
-	return len;
+	return (len);
 }
 
 int	stack_sorted(t_stack *a)
 {
-	while(a->next != NULL)
+	while (a->next != NULL)
 	{
-		if (a->next->value < a->value )
+		if (a->next->value < a->values)
 			return (0);
 		a = a->next;
 	}
 	return (1);
-} 
+}
 
-void free_stack(t_stack *a, char **array)
+void	free_stack(t_stack *a, char **array)
 {
-	t_stack *tmp;
+	t_stack	*tmp;
 	int		i;
 
 	i = 0;
-	if(array!= NULL)
+	if (array != NULL)
 	{
-		while(array[i])
+		while (array[i])
 		{
 			free(array[i]);
 			i++;
-		}	
-	}	
-	while(a)
+		}
+	}
+	while (a)
 	{
 		tmp = a;
 		a = a->next;

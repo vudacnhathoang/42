@@ -12,33 +12,33 @@
 
 #include "push_swap.h"
 
-void handle_error(char *msg)
+void	handle_error(char *msg)
 {
 	ft_printf("%s\n", msg);
-	exit(1);	
+	exit(1);
 }
 
-int check_input(char **nums, int x)
+int	check_input(char **nums, int x)
 {
 	while (nums[x] != NULL)
 	{
-		if(!ft_isnumber(nums[x]))
+		if (!ft_isnumber(nums[x]))
 			return (0);
 		x++;
 	}
 	return (1);
 }
 
-int ft_isnumber(char *s)
+int	ft_isnumber(char *s)
 {
 	int	i;
-	int pre;
+	int	pre;
 
 	i = 0;
 	pre = 0;
-	while(s[i]!= '\0')
+	while (s[i] != '\0')
 	{
-		if((s[i] == '-'|| s[i] == '+') && pre == 0)
+		if ((s[i] == '-' || s[i] == '+') && pre == 0)
 		{
 			i++;
 			pre = 1;
@@ -46,7 +46,7 @@ int ft_isnumber(char *s)
 		else if (ft_isdigit(s[i]))
 			i++;
 		else
-		{	
+		{
 			ft_printf("Invalid input\n");
 			return (0);
 		}
@@ -54,10 +54,10 @@ int ft_isnumber(char *s)
 	return (1);
 }
 
-void check_duplicate(t_stack *a, char **array)
+void	check_duplicate(t_stack *a, char **array)
 {
-	t_stack *p;
-	t_stack *q;
+	t_stack	*p;
+	t_stack	*q;
 
 	p = a;
 	while (p != NULL)
@@ -76,19 +76,19 @@ void check_duplicate(t_stack *a, char **array)
 	}
 }
 
-t_stack*	innit_stack(char **nums)
+t_stack	*innit_stack(char **nums)
 {
 	int		num;
 	t_stack	*head;
 	t_stack	*current;
-	t_stack  *new;
-	
+	t_stack	*new;
+
 	head = NULL;
 	current = NULL;
 	while (*nums)
 	{
 		num = ft_atoi(*nums);
-		new = (t_stack*)malloc(sizeof(t_stack));
+		new = (t_stack *)malloc(sizeof(t_stack));
 		new->value = num;
 		new->prev = NULL;
 		new->next = current;
@@ -99,5 +99,5 @@ t_stack*	innit_stack(char **nums)
 		current = new;
 		nums++;
 	}
-	return current;
+	return (current);
 }

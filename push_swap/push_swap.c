@@ -16,7 +16,7 @@ int	main(int ac, char *ag[])
 {
 	t_stack	*a;
 	t_stack	*b;
-	char **array;
+	char	**array;
 
 	a = NULL;
 	b = NULL;
@@ -25,7 +25,7 @@ int	main(int ac, char *ag[])
 		handle_error("Please input numbers");
 	if (ac > 2)
 	{
-		if(!check_input(ag, 1))
+		if (!check_input(ag, 1))
 			handle_error("Not valid input");
 		a = innit_stack(&ag[1]);
 	}
