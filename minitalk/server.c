@@ -3,18 +3,41 @@
 #include <signal.h>
 #include <unistd.h>
 
+char binary_to_char(int word[8]) {
+    int i;
+    int c;
+
+    i = 0;
+    c = 0;
+    while (i < 8) {
+         c |= (word[i] << (7 - i));
+        i++;
+    }
+    return c;
+}
+
 
 void handle_signal(int signal) {
-    if (signal == SIGINT) {
-        printf("CTRl + C - end of server\n");
-        exit(0);
-    } else if (signal == SIGTERM) {
-        printf("Killing signals - end of server\n");
-    } else if(signal == SIGUSR1) {
-        printf("Received signal: %d\n", signal);
+    static      int i = 0;
+    static      int word[8] ;
+    char c;
+
+    c = 0;
+    if(signal == SIGUSR1) {
+        word[i] = 0; 
+         i++;
     }
-        else if (signal == SIGUSR2) {
-        printf("Received signal: %d\n", signal);
+     else if (signal == SIGUSR2) {
+        word[i] = 1;
+         i++;
+    }
+    if (i == 8) {
+        c = binary_to_char(word);
+        if (c == '\0')
+            write(1, "\n", 1);
+            else
+            write(1, &c, 1);
+        i= 0;
         }
 }
 int main(void)
@@ -22,13 +45,11 @@ int main(void)
     int pid = getpid();
     printf("PID - %d\n", pid);
 
-    signal(SIGINT,handle_signal);
-    signal(SIGTERM,handle_signal); 
     signal(SIGUSR1,handle_signal);
     signal(SIGUSR2,handle_signal);
+   
     while(1)
     {
-        printf("Waiting for signal\n");
         pause();
     }
     return 0;

@@ -5,18 +5,42 @@
 
 
 
+void char_to_binary(char c, int pid)
+{
+    int i;
+    i = 7;
+    int j;
+
+    while (i >= 0) 
+    {  
+        j = ((c >> i) & 1);
+        if (j == 1) {
+            kill(pid, SIGUSR2);
+        } else {
+            kill(pid, SIGUSR1);
+        }
+        i--;
+        usleep(500);
+    }
+
+}
+
+
 int main (int ac, char *av[])
 {
-    int pid = atoi(av[1]);
-    int signal = atoi(av[2]);
-    printf("PID - %d\n", pid);
-    printf("Signal - %d\n", signal);
-    if (signal == 1) {
-        kill(pid, SIGUSR1);
-    } else if (signal == 2) {
-        kill(pid, SIGUSR2);
-    }  else if (signal == 15) {
-        kill(pid, SIGTERM);
+    int i;
+
+    i = 0;
+    if (ac != 3) {
+        printf("Usage: %s <pid>\n", av[1]);
+        return (1);
     }
-    return 0;
+    int pid = atoi(av[1]);
+    kill(pid, SIGUSR1);
+    while (av[2][i]) 
+    {
+        char_to_binary(av[2][i],pid);
+        i++;
+    }
+    char_to_binary('\0',pid);
 }
