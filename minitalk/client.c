@@ -20,7 +20,7 @@ void char_to_binary(char c, int pid)
             kill(pid, SIGUSR1);
         }
         i--;
-        usleep(500);
+        usleep(42);
     }
 
 }
