@@ -6,14 +6,11 @@
 /*   By: nvu-dac <nvu-dac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 15:28:43 by nvu-dac           #+#    #+#             */
-/*   Updated: 2024/10/19 15:51:45 by nvu-dac          ###   ########.fr       */
+/*   Updated: 2024/10/19 17:38:07 by nvu-dac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <unistd.h>
+#include "minitalk.h"
 
 void	char_to_binary(char c, int pid)
 {
@@ -29,7 +26,7 @@ void	char_to_binary(char c, int pid)
 		else
 			kill(pid, SIGUSR1);
 		i--;
-		usleep(42);
+		usleep(100);
 	}
 }
 
@@ -41,7 +38,7 @@ int	main(int ac, char *av[])
 	i = 0;
 	if (ac != 3)
 	{
-		ft_printf("Usage: %s <pid>\n", av[1]);
+		ft_printf("Error");
 		return (1);
 	}
 	pid = ft_atoi(av[1]);

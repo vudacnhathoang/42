@@ -6,14 +6,11 @@
 /*   By: nvu-dac <nvu-dac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 15:29:17 by nvu-dac           #+#    #+#             */
-/*   Updated: 2024/10/19 15:45:36 by nvu-dac          ###   ########.fr       */
+/*   Updated: 2024/10/19 16:32:52 by nvu-dac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <unistd.h>
+#include "minitalk.h"
 
 char	binary_to_char(int word[8])
 {
